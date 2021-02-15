@@ -5,11 +5,12 @@ $username =""; $password=""; $usernameMail="";
 $errors = array();
 
 include('connecta_db_persistent.php') ;
-include('consultasDB.php') ;
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['login_user'])) {
-
+        include('consultasDB.php') ;
+        
         $usernameMail = filter_input(INPUT_POST, 'username');
         $password = filter_input(INPUT_POST, 'password');
 

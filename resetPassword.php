@@ -1,4 +1,37 @@
-<?php include './auxiliarPHP/registerDatabase.php'?>
+<?php
+include'./auxiliarPHP/connecta_db_persistent.php';
+include './auxiliarPHP/consultasDB.php';
+include('./auxiliarPHP/correu.php') ;
+
+$errors = array();
+if (!empty($_GET['code']) && isset($_GET['code']) && !empty($_GET['mail']) && isset($_GET['mail'])) {
+
+    $email = ($_GET['mail']);
+    $activationCode = ($_GET['code']);
+
+    if (existeixCorreuActivationCode($email, $activationCode) > 0) {
+        if (estaResetPassword($email) == 1) {
+            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                if (isset($_POST['recuperar_pass'])) {
+                    $password = filter_input(INPUT_POST, 'password_1');
+                    $verifypass = filter_input(INPUT_POST, 'password_2');
+                    if ($password != $verifypass) {
+                        array_unshift($errors, "No son la mateixa contrasenya");
+                    }
+                    else if (tempsLimit($email)== 0)
+                    {
+                      $password_hash = password_hash($password, PASSWORD_DEFAULT);
+                      inserirNovaPassword($email,$password_hash);
+                      $text = 'Hola Benvingut a Imaginest, <br/> <br/> Hem modificat la vostra constrasenya<br/> <br/>';
+                      enviarCorreu($email,$text);
+                      header("Location: index.php");
+                    }
+                }
+            }
+        } 
+    } 
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,33 +49,8 @@
           </div>
           <div class="card-body">
             <h5 class="card-title text-center">Register</h5>
-			<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" >
+			<form method="post" >
       <?php include './auxiliarPHP/mostrarErrors.php';?>
-
-              <div class="form-label-group">
-                <input name="username" value="<?php echo $username; ?>" type="text" id="inputUserame" class="form-control" placeholder="Username" required autofocus>
-                <label for="inputUserame">Username</label>
-              </div>
-
-              <div class="form-label-group">
-                <input name="email" value="<?php echo $email; ?>" type="email" id="inputEmail" class="form-control" placeholder="Email address" required>
-                <label for="inputEmail">Email address</label>
-              </div>
-
-              <hr>
-
-              <div class="form-label-group">
-                <input name="firstname" value="<?php echo $firstname; ?>" type="text" id="inputFirstName" class="form-control" placeholder="First Name" required>
-                <label for="inputFirstName">First Name</label>
-              </div>
-
-              <div class="form-label-group">
-                <input  type="text" name="secondName" type="text" id="inputsecondName" class="form-control" placeholder="Last Name" required>
-                <label for="inputsecondName">Last Name</label>
-              </div>
-
-              <hr>
-
               <div class="form-label-group">
                 <input name="password_1"  type="password" id="inputPassword" class="form-control" placeholder="Password" required>
                 <label for="inputPassword">Password</label>
@@ -53,8 +61,8 @@
                 <label for="inputConfirmPassword">Confirm password</label>
               </div>
 
-              <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit" name="reg_user">Register</button>
-              <a class="d-block text-center mt-2 small" href="index.php">Sign In</a>
+              <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit" name="recuperar_pass">Change Password</button>
+              <a class="d-block text-center mt-2 small" href="index.php">Cancel</a>
             </form>
           </div>
         </div>

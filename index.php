@@ -28,16 +28,59 @@
                   <input  name="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
                   <label for="inputPassword">Password</label>
                 </div>
+                <div class="container custom-control custom-checkbox mb-3">
+                    <a  href="#" data-target="#pwdModal" data-toggle="modal">Forgot password</a>
+                  </div>
 
+
+                  
              <!--   <div class="custom-control custom-checkbox mb-3">
                   <input type="checkbox" class="custom-control-input" id="customCheck1">
                   <label class="custom-control-label" for="customCheck1">Remember password</label>
                 </div>!-->
                 <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit" name="login_user">Sign in</button>
-                <div class="text-center">
-                  <a class="small" href="register.php">Sign up</a></div>
               </form>
+              <div  class="custom-control custom-checkbox mb-3">
+                  <a href="register.php">Sign up</a></div>
             </div>
+
+
+<!--Pop-up reset Password-->
+<?php include './auxiliarPHP/resetPasswordSend.php'?>
+                  <div id="pwdModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="text-center">
+                            <h1 class="text-center">What's My Password?</h1>
+                        </div>
+                        <div class="modal-body">
+                            <div class="col-md-12">
+                                  <div class="panel panel-default">
+                                      <div class="panel-body">
+                                          <div class="text-center">
+                                            <p>If you have forgotten your password you can reset it here.</p>
+                                              <div class="panel-body">
+                                                  <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+                                                  <?php include './auxiliarPHP/mostrarErrors.php';?>
+                                                      <div class="form-group">
+                                                          <input class="form-control input-lg" placeholder="E-mail or Username" name="recupEmailUser" type="text">
+                                                      </div>
+                                                      <input class="btn btn-lg btn-primary btn-block" value="Send My Password" type="submit" name="recuperarPass">
+                                                  </form>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="col-md-12">
+                            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                  </div>
           </div>
         </div>
       </div>
