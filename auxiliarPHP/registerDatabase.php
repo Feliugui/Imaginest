@@ -6,6 +6,7 @@ $errors = array();
 
 include('connecta_db_persistent.php') ;
 include('consultasDB.php') ;
+include('correu.php') ;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['reg_user'])) {
@@ -45,9 +46,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
  
         if (count($errors) == 0) {
             $password_hash = password_hash($password, PASSWORD_DEFAULT);
-            insereixDatabase($email, $username, $password_hash, $firstname, $secondName);
+            $activationCode = hash('sha256',rand());
+            $text = 'Hola Benvingut a Imaginest, <br/> <br/> Hem d’assegurar-nos que sou humans. Verifiqueu el vostre correu electrònic i comenceu a utilitzar el vostre compte.<br/> <br/><a href=http://localhost/ExercicisPHP/Practica3/mailCheckAccount.php?code=' . $activationCode . '&mail=' . $email . '>Click me!</a>';
+            insereixDatabase($email, $username, $password_hash, $firstname, $secondName,$activationCode);
             $_SESSION['success'] = "S'ha registrar el nou usuari";
-            header('Location: index.php');
+            enviarCorreu($email, $text);
+            
             exit;
         }
     }
