@@ -16,8 +16,9 @@ function enviarCorreu($correu,$text)
     $mail->Port = 587;
 
     //Credencials del compte GMAIL
-    $mail->Username = 'feliugui47@gmail.com';
-    $mail->Password = 'Guillemfeliu33';
+	// dades de correus
+    $mail->Username = '';
+    $mail->Password = '';
 
     //Dades del correu electrònic
     $mail->SetFrom('imagines@activationCode.com', 'Test');
